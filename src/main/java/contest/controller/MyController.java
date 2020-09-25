@@ -1,7 +1,7 @@
-package edu.baylor.cs.se.hibernate.controller;
+package contest.controller;
 
-import edu.baylor.cs.se.hibernate.model.Course;
-import edu.baylor.cs.se.hibernate.services.SuperRepository;
+import contest.model.Course;
+import contest.services.SuperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

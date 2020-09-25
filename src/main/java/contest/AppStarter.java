@@ -1,4 +1,4 @@
-package edu.baylor.cs.se.hibernate;
+package contest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

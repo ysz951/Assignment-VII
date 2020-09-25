@@ -1,9 +1,9 @@
-package edu.baylor.cs.se.hibernate.services;
+package contest.services;
 
-import edu.baylor.cs.se.hibernate.model.Course;
-import edu.baylor.cs.se.hibernate.model.Student;
-import edu.baylor.cs.se.hibernate.model.Teacher;
-import edu.baylor.cs.se.hibernate.model.Room;
+import contest.model.Course;
+import contest.model.Student;
+import contest.model.Teacher;
+import contest.model.Room;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +34,13 @@ public class SuperRepository {
         teacher.setTelephoneNumber("+1 (123) 456-0789");
         em.persist(teacher);
 
+        Teacher teacher2 = new Teacher();
+        teacher2.setFirstName("Bob");
+        teacher2.setLastName("Porter");
+        teacher2.setEmail("bob@porter.com");
+        teacher2.setTelephoneNumber("+1 (123) 456-0789");
+        em.persist(teacher2);
+
         Room room = new Room();
         room.setLocation("Baylor");
         em.persist(room);
@@ -46,6 +53,7 @@ public class SuperRepository {
         course.getStudents().add(student);
         course.getStudents().add(student3);
         course.getStudents().add(student4);
+//        course.getTeachers().add(teacher2);
 //        em.persist(course);
 
         Course course2 = new Course();
@@ -57,8 +65,8 @@ public class SuperRepository {
         em.persist(course2);
 
         //Do you know why this is not working?
-//        student2.getCourses().add(course);
-        course.getStudents().add(student2);
+        student2.getCourses().add(course);
+//        course.getStudents().add(student2);
 
 
 

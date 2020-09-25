@@ -1,4 +1,4 @@
-package edu.baylor.cs.se.hibernate.model;
+package contest.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;

@@ -1,4 +1,4 @@
-package edu.baylor.cs.se.hibernate.model;
+package contest.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -10,20 +10,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Student implements Serializable{
-
+public class Room implements Serializable{
     @Id
     @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String location;
 
     public Long getId() {
         return id;
     }
 
-    @ManyToMany(mappedBy = "students"/*, cascade = CascadeType.ALL, fetch = FetchType.LAZY*/)
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
     //annotation bellow is just for Jackson serialization in controller
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -31,19 +37,7 @@ public class Student implements Serializable{
     @JsonIdentityReference(alwaysAsId=true)
     private Set<Course> courses = new HashSet();
 
-    public Set<Course> getCourses() {
+    public Set getCourses() {
         return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
     }
 }
