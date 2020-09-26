@@ -21,7 +21,7 @@ public class ContestController {
     }
 
     //very bad practise - using GET method to insert something to DB
-    @RequestMapping(value = "/initialize", method = RequestMethod.GET)
+    @RequestMapping(value = "/populate", method = RequestMethod.GET)
     public ResponseEntity populate(){
         contestRepository.populate();
         return new ResponseEntity(HttpStatus.OK);
@@ -37,28 +37,13 @@ public class ContestController {
         return new ResponseEntity(contestRepository.getContest(),HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/person", method = RequestMethod.GET)
-    public ResponseEntity<Integer> getPerson(){
-        return new ResponseEntity(contestRepository.getPerson(),HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/capacity", method = RequestMethod.GET)
-    public ResponseEntity<Integer> getCapacity(){
-        return new ResponseEntity(contestRepository.getCapacity(),HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/age", method = RequestMethod.GET)
-    public ResponseEntity<Person> getPersonAge(){
-        return new ResponseEntity(contestRepository.getPersonAge(),HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/team_number", method = RequestMethod.GET)
-    public ResponseEntity<Person> getTeamNumber(){
-        return new ResponseEntity(contestRepository.getTeamNumber(),HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
-    public ResponseEntity<Person> getCoursesByStudentNamePar(@PathVariable String name){
+    @RequestMapping(value = "/person/name/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Person> getPersonName(@PathVariable String name){
         return new ResponseEntity(contestRepository.getPersonName(name),HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/person", method = RequestMethod.GET)
+    public ResponseEntity<Person> getAllPerson(){
+        return new ResponseEntity(contestRepository.getAllPerson(),HttpStatus.OK);
     }
 }

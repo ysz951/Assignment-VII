@@ -29,67 +29,71 @@ public class StudentTest {
     @Autowired
     private TestEntityManager entityManager;
 
-//    @Before
-////    Build a pdf file by given parameter
-//    public void initAll() {
-//        Team team1 = createTeam("testName", 1, State.Pending);
-//        Team team2 = createTeam("testNam2", 3, State.Pending);
-//
-//        Contest contest1 = createContest(2, date1, "TestContest1", true, date2, date3);
-//
-//        Person manager1 = createPerson(date1, "test1@contest.com", "manager1", "Baylor1");
-//        Person manager2 = createPerson(date1, "test2@contest.com", "manager2", "Baylor2");
-//
-//        contest1.getTeams().addAll(Arrays.asList(team1, team2));
-//        contest1.getManagers().addAll(Arrays.asList(manager1, manager2));
-//    }
-
-
-    @Test
-    //simple test
-    public void capacityTest(){
-        Team team1 = createTeam("testName", 1, State.Pending);
-        Person student1 = createPerson(date1, "student1@contest.com", "student1", "BaylorStu1");
-        Person student2 = createPerson(date2, "student2@contest.com", "student2", "BaylorStu2");
-        Person student3 = createPerson(date3, "student3@contest.com", "student3", "BaylorStu3");
-        Person student4 = createPerson(date2, "student4@contest.com", "student4", "BaylorStu4");
-        List<Person> personList= Arrays.asList(student1, student2, student3, student4);
-        team1.getStudents().addAll(personList);
-        String cunt = entityManager.getEntityManager()
-                .createQuery("SELECT COUNT(ts) FROM Team t JOIN t.students ts").getSingleResult().toString();
-        int g = Integer.valueOf(cunt);
-        assertThat(g).isEqualTo(personList.size());
-
-    }
-
     @Test
     //simple test
     public void groupTest(){
-        Team team1 = createTeam("testName", 1, State.Pending);
-        Person student1 = createPerson(date1, "student1@contest.com", "student1", "BaylorStu1");
-        Person student2 = createPerson(date2, "student2@contest.com", "student2", "BaylorStu2");
-        Person student3 = createPerson(date3, "student3@contest.com", "student3", "BaylorStu3");
-        Person student4 = createPerson(date2, "student4@contest.com", "student4", "BaylorStu4");
-        List<Person> personList= Arrays.asList(student1, student2, student3, student4);
-        team1.getStudents().addAll(personList);
+        Date date1 = new Date(2006, 11, 12);
+        Date date2 = new Date(2015, 3, 21);
+        Date date3 = new Date(2016, 9, 24);
+
+        Team team1 = createTeam("team1", 2, State.Pending);
+        Team team2 = createTeam("team2", 3, State.Pending);
+        Team team3 = createTeam("team3", 4, State.Pending);
+
+        Contest contest = createContest(2, date1, "contest", true, date2, date3);
+        Contest subcontest = createContest(3, date2, "subcontest", true, date2, date3);
+
+
+
+        List<Person> personList1= new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String email = String.format("student%1$d@contest.com", i);
+            String name = String.format("sutdent%1$d", i);
+            String university = String.format("BaylorStu%1$d",i);
+            personList1.add(createPerson(date1, email, name, university));
+        }
+        List<Person> personList2= new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String email = String.format("student%1$d@contest.com", i + 3);
+            String name = String.format("sutdent%1$d", i);
+            String university = String.format("BaylorStu%1$d",i);
+            personList2.add(createPerson(date2, email, name, university));
+        }
+        List<Person> personList3= new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String email = String.format("student%1$d@contest.com", i + 6);
+            String name = String.format("sutdent%1$d", i);
+            String university = String.format("BaylorStu%1$d",i);
+            personList3.add(createPerson(date3, email, name, university));
+        }
+        Person manager1 = createPerson(date1, "manager1@contest.com", "manager1", null);
+        Person manager2 = createPerson(date1, "manager2@contest.com", "manager2", null);
+
+        Person coach1 = createPerson(date1, "coach1@contest.com", "coach1", null);
+        Person coach2 = createPerson(date1, "coach2@contest.com", "coach2", null);
+        Person coach3 = createPerson(date1, "coach3@contest.com", "coach3", null);
+
+        team1.setCoach(coach1);
+        team2.setCoach(coach2);
+        team3.setCoach(coach3);
+        team1.getStudents().addAll(personList1);
+        team2.getStudents().addAll(personList2);
+        team3.getStudents().addAll(personList3);
+        team1.setContest(subcontest);
+        team2.setContest(subcontest);
+        team3.setContest(subcontest);
+        contest.getManagers().add(manager1);
+        subcontest.getManagers().add(manager2);
+        subcontest.setParentContest(contest);
         @SuppressWarnings("unchecked")
         List<Object[]> groupList =  entityManager.getEntityManager()
-                .createQuery("SELECT COUNT(DISTINCT ts) AS student_number, ts.birthdate AS birthdate FROM Team t JOIN t.students ts GROUP BY ts.birthdate")
+                .createQuery("SELECT COUNT(DISTINCT ts), ts.birthdate FROM Team t JOIN t.students ts GROUP BY ts.birthdate")
                 .getResultList();
         for (Object[] result: groupList) {
             int count = ((Number) result[0]).intValue();
             String birthdate = ((Date) result[1]).toString();
-            System.out.println(count);
-            System.out.printf("birdathe %1$s \n", birthdate);
+            System.out.printf("There are %1$d students grouped by %2$s \n", count,birthdate);
         }
-
-        System.out.printf("list size is %1$d \n", groupList.size());
-
-//        String cunt = entityManager.getEntityManager()
-//                .createQuery("SELECT COUNT(ts) FROM Team t JOIN t.students ts").getSingleResult().toString();
-//        int g = Integer.valueOf(cunt);
-//        assertThat(g).isEqualTo(personList.size());
-
     }
 
 

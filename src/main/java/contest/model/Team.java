@@ -28,14 +28,6 @@ public class Team implements Serializable{
     @Column(nullable = false)
     private int rank;
 
-    public Contest getContest() {
-        return contest;
-    }
-
-    public void setContest(Contest contest) {
-        this.contest = contest;
-    }
-
     @Column(nullable = false)
     private State state;
 
@@ -58,9 +50,34 @@ public class Team implements Serializable{
     @JsonIdentityReference(alwaysAsId=true)
     private Set<Person> students = new HashSet();
 
+    @ManyToOne
+    //annotation bellow is just for Jackson serialization in controller
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @JsonIdentityReference(alwaysAsId=true)
+    private Person coach;
+
+
     public enum State {
 
         Accepted, Pending, Canceled
+    }
+
+    public Person getCoach() {
+        return coach;
+    }
+
+    public void setCoach(Person coach) {
+        this.coach = coach;
+    }
+
+    public Contest getContest() {
+        return contest;
+    }
+
+    public void setContest(Contest contest) {
+        this.contest = contest;
     }
 
     public Set<Person> getStudents() {

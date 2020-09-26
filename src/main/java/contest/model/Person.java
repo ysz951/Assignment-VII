@@ -33,7 +33,7 @@ public class Person implements Serializable{
     @Column(nullable = false)
     private Date birthdate;
 
-    @Column(nullable = false)
+    @Column
     private String university;
 
     @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -57,6 +57,21 @@ public class Person implements Serializable{
             property = "id")
     @JsonIdentityReference(alwaysAsId=true)
     private Set<Person> student_teams = new HashSet();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "coach")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @JsonIdentityReference(alwaysAsId=true)
+    private Set<Team> coach_team = new HashSet<>();
+
+    public Set<Team> getCoach_team() {
+        return coach_team;
+    }
+
+    public void setCoach_team(Set<Team> coach_team) {
+        this.coach_team = coach_team;
+    }
 
     public Set<Person> getStudent_teams() {
         return student_teams;

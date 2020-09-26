@@ -15,67 +15,77 @@ import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ContestTest {
-    Date date1 = new Date();
-    Date date2 = new Date();
-    Date date3 = new Date();
-
     @Autowired
     private TestEntityManager entityManager;
-
-    @Before
-//    Build a pdf file by given parameter
-    public void initAll() {
-        Team team1 = createTeam("testName", 1, State.Pending);
-        Team team2 = createTeam("testNam2", 3, State.Pending);
-
-        Contest contest1 = createContest(2, date1, "TestContest1", true, date2, date3);
-
-        Person manager1 = createPerson(date1, "test1@contest.com", "manager1", "Baylor1");
-        Person manager2 = createPerson(date1, "test2@contest.com", "manager2", "Baylor2");
-
-        contest1.getTeams().addAll(Arrays.asList(team1, team2));
-        contest1.getManagers().addAll(Arrays.asList(manager1, manager2));
-    }
-
 
     @Test
     //simple test
     public void capacityTest(){
-//        Team team1 = createTeam("testName", 1, State.Pending);
-//        Team team2 = createTeam("testNam2", 3, State.Pending);
-//
-//        Contest contest1 = createContest(2, date1, "TestContest1", true, date2, date3);
-//
-//        Person manager1 = createPerson(date1, "test1@contest.com", "manager1", "Baylor1");
-//        Person manager2 = createPerson(date1, "test2@contest.com", "manager2", "Baylor2");
-//
-//        contest1.getTeams().addAll(Arrays.asList(team1, team2));
-//        contest1.getManagers().addAll(Arrays.asList(manager1, manager2));
+        Date date1 = new Date(2006, 11, 12);
+        Date date2 = new Date(2015, 3, 21);
+        Date date3 = new Date(2016, 9, 24);
 
-        Contest dbContest= (Contest)entityManager.getEntityManager().createQuery("SELECT c FROM Contest c").getResultList().get(0);
-        Team dbTeam= (Team)entityManager.getEntityManager().createQuery("SELECT t FROM Team t").getResultList().get(0);
-        int teamNumber = dbContest.getTeams().size();
-        assertThat(teamNumber).isLessThanOrEqualTo(dbContest.getCapacity());
+        Team team1 = createTeam("team1", 2, State.Pending);
+        Team team2 = createTeam("team2", 3, State.Pending);
+        Team team3 = createTeam("team3", 4, State.Pending);
+
+        Contest contest = createContest(2, date1, "contest", true, date2, date3);
+        Contest subcontest = createContest(3, date2, "subcontest", true, date2, date3);
+
+        List<Person> personList1= new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String email = String.format("student%1$d@contest.com", i);
+            String name = String.format("sutdent%1$d", i);
+            String university = String.format("BaylorStu%1$d",i);
+            personList1.add(createPerson(date1, email, name, university));
+        }
+        List<Person> personList2= new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String email = String.format("student%1$d@contest.com", i + 3);
+            String name = String.format("sutdent%1$d", i);
+            String university = String.format("BaylorStu%1$d",i);
+            personList2.add(createPerson(date2, email, name, university));
+        }
+        List<Person> personList3= new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String email = String.format("student%1$d@contest.com", i + 6);
+            String name = String.format("sutdent%1$d", i);
+            String university = String.format("BaylorStu%1$d",i);
+            personList3.add(createPerson(date3, email, name, university));
+        }
+        Person manager1 = createPerson(date1, "manager1@contest.com", "manager1", null);
+        Person manager2 = createPerson(date1, "manager2@contest.com", "manager2", null);
+
+        Person coach1 = createPerson(date1, "coach1@contest.com", "coach1", null);
+        Person coach2 = createPerson(date1, "coach2@contest.com", "coach2", null);
+        Person coach3 = createPerson(date1, "coach3@contest.com", "coach3", null);
+
+        team1.setCoach(coach1);
+        team2.setCoach(coach2);
+        team3.setCoach(coach3);
+        team1.getStudents().addAll(personList1);
+        team2.getStudents().addAll(personList2);
+        team3.getStudents().addAll(personList3);
+        team1.setContest(subcontest);
+        team2.setContest(subcontest);
+        team3.setContest(subcontest);
+        contest.getManagers().add(manager1);
+        subcontest.getManagers().add(manager2);
+        subcontest.setParentContest(contest);
+        @SuppressWarnings("unchecked")
+        List<Team> Teams = entityManager.getEntityManager().createQuery("SELECT t FROM Contest c JOIN c.teams t WHERE c.parentContest IS NOT NULL").getResultList();
+        int occupancy = Teams.size();
+        assertThat(occupancy).isLessThanOrEqualTo(subcontest.getCapacity());
 
     }
 
-    @Test
-    //simple test
-    public void demoTest(){
-        Person dbPerson = (Person)entityManager.getEntityManager()
-                .createQuery("SELECT p FROM Person p WHERE p.name LIKE 'manager1' ")
-                .getResultList().get(0);
-        assertThat(dbPerson.getName()).isEqualToIgnoringCase(dbPerson.getName());
-    }
 
     private Team createTeam(String name, int rank, State state) {
         Team team = new Team();

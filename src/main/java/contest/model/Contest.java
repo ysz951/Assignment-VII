@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name="CONTEST")
 public class Contest implements Serializable{
     @Id
     @GeneratedValue
@@ -57,6 +58,39 @@ public class Contest implements Serializable{
             property = "id")
     @JsonIdentityReference(alwaysAsId=true)
     private Set<Person> managers = new HashSet();
+
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "PARENT_ID")
+//    private Contest parentContest;
+    @ManyToOne
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @JsonIdentityReference(alwaysAsId=true)
+    private Contest parentContest;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentContest")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @JsonIdentityReference(alwaysAsId=true)
+    private Set<Contest> subContest = new HashSet<>();
+
+    public Contest getParentContest() {
+        return parentContest;
+    }
+
+    public void setParentContest(Contest parentContest) {
+        this.parentContest = parentContest;
+    }
+
+    public Set<Contest> getSubContest() {
+        return subContest;
+    }
+
+    public void setSubContest(Set<Contest> subContest) {
+        this.subContest = subContest;
+    }
 
     public Set<Person> getManagers() {
         return managers;
