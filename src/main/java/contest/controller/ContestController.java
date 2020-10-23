@@ -20,8 +20,7 @@ public class ContestController {
         this.contestRepository = contestRepository;
     }
 
-    //very bad practise - using GET method to insert something to DB
-    @RequestMapping(value = "/populate", method = RequestMethod.GET)
+    @RequestMapping(value = "/populate", method = RequestMethod.POST)
     public ResponseEntity populate(){
         contestRepository.populate();
         return new ResponseEntity(HttpStatus.OK);
