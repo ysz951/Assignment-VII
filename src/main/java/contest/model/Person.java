@@ -47,7 +47,7 @@ public class Person implements Serializable{
     @JsonIdentityReference(alwaysAsId=true)
     private Set<Contest> contests = new HashSet();
 
-    @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany//(targetEntity=Team.class)
     @JoinTable(name = "TEAM_STUDENT",
             joinColumns = { @JoinColumn(name = "STUDENT_ID", referencedColumnName = "ID") }, //do not forget referencedColumnName if name is different
             inverseJoinColumns = { @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID") })
@@ -56,7 +56,7 @@ public class Person implements Serializable{
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
     @JsonIdentityReference(alwaysAsId=true)
-    private Set<Person> student_teams = new HashSet();
+    private Set<Team> student_teams = new HashSet();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "coach")
     @JsonIdentityInfo(
@@ -73,11 +73,11 @@ public class Person implements Serializable{
         this.coach_team = coach_team;
     }
 
-    public Set<Person> getStudent_teams() {
+    public Set<Team> getStudent_teams() {
         return student_teams;
     }
 
-    public void setStudent_teams(Set<Person> student_teams) {
+    public void setStudent_teams(Set<Team> student_teams) {
         this.student_teams = student_teams;
     }
 

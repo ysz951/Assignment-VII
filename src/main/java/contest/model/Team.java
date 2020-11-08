@@ -39,11 +39,10 @@ public class Team implements Serializable{
     @JsonIdentityReference(alwaysAsId=true)
     private Contest contest;
 
-    @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany//(targetEntity=Person.class)
     @JoinTable(name = "TEAM_STUDENT",
-            joinColumns = { @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID") }, //do not forget referencedColumnName if name is different
+            joinColumns = { @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID") },
             inverseJoinColumns = { @JoinColumn(name = "STUDENT_ID", referencedColumnName = "ID") })
-    //annotation bellow is just for Jackson serialization in controller
     @JsonIdentityInfo(
             generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
