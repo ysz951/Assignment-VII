@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import java.util.*;
 
 //Ignore this as it is Spring and not Java EE (Jax-RS) controller
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class PopulateData {
 

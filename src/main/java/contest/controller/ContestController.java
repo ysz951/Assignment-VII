@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Ignore this as it is Spring and not Java EE (Jax-RS) controller
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/contest")
 public class ContestController {

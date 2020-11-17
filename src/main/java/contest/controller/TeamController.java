@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.*;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/team")
 public class TeamController {
@@ -34,7 +34,7 @@ public class TeamController {
         if (t == null) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        Person coach = personRepo.findById(coachId).orElse(null);
+        Person coach = personRepo.findById(id).orElse(null);
         if (coach == null) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
