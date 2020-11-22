@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('Test stage') {
             steps {
-                withMaven(maven: 'maven') {
+                withMaven {
                     sh 'mvn test'
                 }
             }
