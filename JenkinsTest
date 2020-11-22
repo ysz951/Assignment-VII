@@ -1,10 +1,17 @@
 pipeline {
     agent any
     stages {
+        stage ('Build Stage') {
+            steps {
+                withMaven {
+                    sh 'mvn compile'
+                }
+            }
+        }
         stage ('Test stage') {
             steps {
                 withMaven {
-                    bat 'mvn test'
+                    sh 'mvn test'
                 }
             }
         }
