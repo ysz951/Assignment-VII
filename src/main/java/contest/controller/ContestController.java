@@ -1,22 +1,21 @@
 package contest.controller;
 
-import contest.data.ContestsRepository;
-import contest.data.PersonRepository;
-import contest.data.TeamRepository;
-import contest.model.*;
-import contest.services.ContestRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import contest.data.ContestsRepository;
+import contest.data.PersonRepository;
+import contest.data.TeamRepository;
+import contest.model.Contest;
+import contest.services.ContestRepository;
 
 //Ignore this as it is Spring and not Java EE (Jax-RS) controller
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/contest")
 public class ContestController {
@@ -37,7 +36,8 @@ public class ContestController {
 
     @GetMapping
     public ResponseEntity<List<Contest>> getContest(){
-        return new ResponseEntity<>((List<Contest>) contestRepo.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(contestRepository.getContest(), HttpStatus.OK);
+//        return new ResponseEntity<>((List<Contest>) contestRepo.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
