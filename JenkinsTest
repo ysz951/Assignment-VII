@@ -1,18 +1,32 @@
 pipeline {
-    agent any
+    tools {
+        maven 'maven3.6'
+        jdk 'jdk8'
+    }
+    agent any 
     stages {
-        stage ('Build Stage') {
+        stage('Clean') { 
             steps {
-                withMaven {
-                    sh 'mvn compile'
-                }
+                sh 'mvn clean'
+                echo 'CLEAN is DONE!' 
             }
         }
-        stage ('Test stage') {
+        stage('Package') { 
             steps {
-                withMaven {
-                    sh 'mvn test'
-                }
+                sh 'mvn package'
+                echo 'PACKAGING is DONE!' 
+            }
+        }
+        stage('Test') { 
+            steps {
+                sh 'mvn test'
+                echo 'Test OK!' 
+            }
+        }
+        stage('Deploy') { 
+            steps {
+                sh 'mvn install' 
+                echo 'Installed! :)'
             }
         }
     }
